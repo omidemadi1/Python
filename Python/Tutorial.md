@@ -2381,21 +2381,18 @@ print(x)
 <br>
 <br>
 
-
-
-
 * ### Random
 این ماژول برای اضافه کردن اعداد به صورت تصادفی استفاده میشود
 
-random()
+random() <br>
 یک عدد تصادفی بین (0.0 و 1.0) تولید میکند.
 ```python
 from random import random
 print(random())
 -> 0.18024209212046738
 ```
-seed()
-دنباله ای از اعداد تصادفی را تولید میکند.
+seed() <br>
+دنباله ای از اعداد تصادفی را تولید میکند. <br>
 این نکته را در نظر بگیرید که با هر بار اجرای دوباره برنامه این دنباله اعداد تغییر نخواهد کرد در واقع این دنباله یک بار تولید میشود.
 ```python
 from random import random, seed
@@ -2403,21 +2400,21 @@ seed(100)
 print(random())
 -> 0.9881136151518843
 ```
-uniform()
+uniform() <br>
 برای تعیین بازه اعداد تصادفی استفاده میشود.
 ```python
 from random import uniform
 print(uniform(5,15))
 -> 13.18024209212046738
 ```
-randint()
+randint() <br>
 برای تولید اعداد صحیح تصادفی در بازه دلخواه استفاده میشود.
 ```python
 from random import randint
 print(randit(5,15))
 -> 13
 ```
-randrange()
+randrange() <br>
 برای تولید اعداد تصادفی با گام مشخص استفاده میشود. یعنی میتوانیم تعریف کنیم که حرکت اعداد به چه صورتی باشد.
 ```python
 from random import randrange
@@ -2428,7 +2425,7 @@ print(randrange(5, 15 ,2))
 -> 9
 -> 11
 ```
-choice()
+choice() <br>
 برای انتخاب یکی از اعضای متغیر به صورت تصادفی استفاده میشود.
 ```python
 from random import choice
@@ -2436,7 +2433,7 @@ x = ["a", "b", "c", "d"]
 print(choice(x))
 -> c
 ```
-sample()
+sample() <br>
 به کمک این دستور میتوانیم یک لیست رندوم از لیست اولیه خود تولید کنیم.
 ```python
 from random import sample
@@ -2446,7 +2443,7 @@ print(sample(x, 3))
 -> ['a', 'd', 'b']
 -> ['b', 'e', 'c']
 ```
-shuffle()
+shuffle() <br>
 این دستور به صورت اتفاقی ترتیب چینش یک متغییر را تغیر میدهد.
 ```python
 from random import shuffle
