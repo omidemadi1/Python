@@ -2266,7 +2266,61 @@ f2()
 -> ********************
 ```
 <br>
+
+همچینین ما میتوانیم از دکوراتور های متعددی بر روی یک تابع استفاده کنیم
+```python
+def plus(func):
+	def inner(*x, **y):
+		print("+" * 20)
+		func(*x, **y)
+		print("+" * 20)
+	return inner
+
+def star(func):
+ def inner(*x, **y):
+  print("*" * 20)
+  func(*x, **y)
+  print("*" * 20)
+ return inner
+
+@plus
+@star
+def msg(name):
+ print("i am ", name)
+
+msg(ali)
+
+_> ++++++++++++++++++++
+-> ********************
+-> ali
+-> ********************
+-> ++++++++++++++++++++
+```
 <br>
+
+همچنین میتوانیم برای دکوراتور ها ورودی هم در نظر گرفت، به این شکل که تابع دکوراتور باید از چند تابع تشکیل شود
+```python
+def star(num):
+	def inner1(func):
+		def inner2(*x, **y):
+			print("*" * num)
+			func(*x, **y)
+			print("*" * num)
+		retunr inner2
+	return inner1
+
+@star(5)
+def msg(name):
+	print("i am", name)
+
+msg(ali)
+
+-> *****
+-> ali
+-> *****
+```
+<br>
+
 
 ## Modules
 ماژول ها کتابخانه ای از کدها هستند. که میتوانید آنها را به کد خود اضافه کنید. <br>
