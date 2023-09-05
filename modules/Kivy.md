@@ -1,9 +1,11 @@
 ## Installing
 برای نصب این فریم ورک ابتدا باید یک محیط مجازی به وسیله پایتون بسازیم <br>
+
 `python -m virtualenv [venv-name]`
 <br>
 
 و برای فعال سازی آن باید به روش زیر عمل کنیم <br>
+
 **Windows** <br>
 `[venv-name]\Scripts\activate`
 <br>
