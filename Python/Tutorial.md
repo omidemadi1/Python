@@ -2302,9 +2302,9 @@ _> ++++++++++++++++++++
 ```python
 def star(num):
 	def inner1(func):
-		def inner2(*x, **y):
+		def inner2(*args, **kwargs):
 			print("*" * num)
-			func(*x, **y)
+			func(*args, **kwargs)
 			print("*" * num)
 		retunr inner2
 	return inner1
@@ -2321,6 +2321,77 @@ msg(ali)
 ```
 <br>
 
+به مثال زیر توجه کنید <br>
+این برنامه قصد دارد که اجازه دست رسی یک سری از کاربر ها را به برنامه قطع کند
+```python
+password = {"ali" : "24369871", "reza01" : "547925", "neda1375" : 645564"}
+blacklist = {"neda1375", "reza01"}
+
+def ban(func):
+	def inner(*args, **kwargs):
+		if args[0] in blacklist:
+			print("This user is blackes!!!")
+		else :
+			func(*args, **kwargs)
+	return inner
+
+
+@ban
+def print_password(username):
+	print(username, " : ", password[username])
+
+
+@ban
+def change_password(username, new_password)
+	password[username] = new_password
+	print(username, " : ", password[username])
+
+
+print_password(ali)
+change_password(neda1375, 12345)
+
+-> ali : 24369871
+-> This user is blocked!!!
+```
+<br>
+
+مثال زیر برای به دست آوردن زمانی است که یک تابع برای اجرا لازم دارد
+```python
+from time import perf_counter
+
+def time_calculation(func):
+	def wrapper_decorator(*args, **kwargs):
+		start_time = perf_counter()
+		value = func(*args, **kwargs)
+		end_time = perf_counter()
+		run_time = end_time - start time
+		print("The run time of", func.__name__, "is", run_time)
+		return value
+	return wrapper_decorator
+
+
+@time_calculation
+def A (y):
+	sum = 0
+	for i in range(y):
+		s += i**2
+
+
+@time_calculation
+def B (x):
+	fact = 1
+	for i in range(1, x+1):
+		facr *= i
+
+
+A(100000)
+B(10000)
+
+-> 5.684652135
+-> 12.43184654
+```
+<br>
+<br>
 
 ## Modules
 ماژول ها کتابخانه ای از کدها هستند. که میتوانید آنها را به کد خود اضافه کنید. <br>
