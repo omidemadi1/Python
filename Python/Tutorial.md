@@ -1525,6 +1525,263 @@ print(filtered)
 <br>
 <br>
 
+## Decorator
+برای اعمال تغیرات یک تابع به وسیله تابع دیگری به کار میرود.<br>
+برای اینکار باید ابتدا یک تابع معرفی کنیم که میخواهیم با توجه به آن بر روی توابع دیگر ما آن تغیرات اعمال شوند.
+```python
+def dec(func):
+ def inner():
+  print("*" * 20)
+  func()
+  print("*" * 20)
+ return inner
+
+@dec
+def f()
+ print("ali")
+
+@dec
+def f2():
+ print("omid")
+
+f()
+f2()
+
+-> ********************
+-> ali
+-> ********************
+-> ********************
+-> omid
+-> ********************
+```
+<br>
+
+همچینین ما میتوانیم از دکوراتور های متعددی بر روی یک تابع استفاده کنیم
+```python
+def plus(func):
+	def inner(*x, **y):
+		print("+" * 20)
+		func(*x, **y)
+		print("+" * 20)
+	return inner
+
+def star(func):
+ def inner(*x, **y):
+  print("*" * 20)
+  func(*x, **y)
+  print("*" * 20)
+ return inner
+
+@plus
+@star
+def msg(name):
+ print("i am ", name)
+
+msg(ali)
+
+_> ++++++++++++++++++++
+-> ********************
+-> ali
+-> ********************
+-> ++++++++++++++++++++
+```
+<br>
+
+همچنین میتوانیم برای دکوراتور ها ورودی هم در نظر گرفت، به این شکل که تابع دکوراتور باید از چند تابع تشکیل شود
+```python
+def star(num):
+	def inner1(func):
+		def inner2(*args, **kwargs):
+			print("*" * num)
+			func(*args, **kwargs)
+			print("*" * num)
+		retunr inner2
+	return inner1
+
+@star(5)
+def msg(name):
+	print("i am", name)
+
+msg(ali)
+
+-> *****
+-> ali
+-> *****
+```
+<br>
+
+به مثال زیر توجه کنید <br>
+این برنامه قصد دارد که اجازه دست رسی یک سری از کاربر ها را به برنامه قطع کند
+```python
+password = {"ali" : "24369871", "reza01" : "547925", "neda1375" : 645564"}
+blacklist = {"neda1375", "reza01"}
+
+def ban(func):
+	def inner(*args, **kwargs):
+		if args[0] in blacklist:
+			print("This user is blackes!!!")
+		else :
+			func(*args, **kwargs)
+	return inner
+
+
+@ban
+def print_password(username):
+	print(username, " : ", password[username])
+
+
+@ban
+def change_password(username, new_password)
+	password[username] = new_password
+	print(username, " : ", password[username])
+
+
+print_password(ali)
+change_password(neda1375, 12345)
+
+-> ali : 24369871
+-> This user is blocked!!!
+```
+<br>
+
+مثال زیر برای به دست آوردن زمانی است که یک تابع برای اجرا لازم دارد
+```python
+from time import perf_counter
+
+def time_calculation(func):
+	def wrapper_decorator(*args, **kwargs):
+		start_time = perf_counter()
+		value = func(*args, **kwargs)
+		end_time = perf_counter()
+		run_time = end_time - start time
+		print("The run time of", func.__name__, "is", run_time)
+		return value
+	return wrapper_decorator
+
+
+@time_calculation
+def A (y):
+	sum = 0
+	for i in range(y):
+		s += i**2
+
+
+@time_calculation
+def B (x):
+	fact = 1
+	for i in range(1, x+1):
+		facr *= i
+
+
+A(100000)
+B(10000)
+
+-> 5.684652135
+-> 12.43184654
+```
+<br>
+<br>
+
+## Generator
+جنراتورها یا مولد ها به ما در تمیز کردن و بهمینه تر شدن کد ها کمک میکند <br>
+جنراتور ها ماهیت تنبلی دارند، یعنی تمام اطلاعات را هم زمان ذخیره نمیکنند و تنها در زمانی اطلاعات را به ما نشان میدهند که به آن ها نیاز داشته باشیم <br>
+برای اینکه بتوانیم یک جنراتور بسازیم باید از کلمه کلیدی 'yield' استفاده کنیم <br>
+و برای این که بتوانیم به آن دسترسی داشته باشیم باید از ()next استفاده کنیم <br>
+```python
+def func(x):
+	yield x**2
+
+x = func(5)
+print(next(x))
+
+-> 25
+```
+<br>
+
+رفتار این تابع به این شکل است که هر بار که آن را به وسیله ()next صدا میزنیم مرحله بعدی را اجرا میکند
+```python
+def func(x):
+	print("reza")
+	yield x**2
+	print("hello")
+	yield x
+	print("ok")
+	yield x - 2
+
+x = func(5)
+print(next(x))
+
+-> reza
+-> 25
+```
+```python
+def func(x):
+	print("reza")
+	yield x**2
+	print("hello")
+	yield x
+	print("ok")
+	yield x - 2
+
+x = func(5)
+print(next(x))
+print(next(x))
+print(next(x))
+
+-> reza
+-> 25
+-> hello
+-> 5
+-> ok
+-> 3
+```
+<br>
+
+برنامه هر بار که به دستور yield برسد مکث میکند و منتظر میماند تا دوباره آن را صدا بزنیم تا ادامه برنامه را برای ما اجرا کند <br>
+و در صورتی که تعداد دفعاتی که آن را صدا میزنیم از خود آن بیشتر باشد با ارور مواجه میشویم <br>
+
+* ### for in generator
+```python
+def my_generator():
+	for i in range(1000):
+		yield i**2
+
+
+g = my_generator()
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+
+-> 0
+-> 1
+-> 4
+-> 9
+```
+<br>
+
+میتوانیم از این تابع هر کجا که نیاز داشتیم استفاده کنیم و هر دفعه که آن را صدا بزنیم عدد بعدی را به ما نشان میدهد <br>
+اگر بخواهیم تمام عناصر داخل این تابع را صدا بزنیم میتوانیم به روش زیر عمل کنیم
+```python
+def my_generator():
+	for i in range(5:
+		yield i**2
+
+
+g = my_generator()
+for i in g:
+	print(i)
+
+-> 0
+-> 1
+-> 4
+-> 9
+-> 16
+```
+<br>
+
+در این روش بعد از اینکه به انتهای شمارش رسید دیگر با ارور مواجه نمیشویم <br>
+
 ## Arrays
 برای دنباله های طولانی تر از اعداد استفاده میشود. آرایه فضای کمتر را اشغال میکند و همچنین  عملکرد بهینه تری را دارد
 برای استفاده ابتدا باید ماژول آن را وارد کنیم
@@ -2232,163 +2489,6 @@ print("code2", timeit(code2, number = 10000))
 
 ➡️ code1 0.006304900016402826
 code2 0.003800399979809299
-```
-<br>
-<br>
-
-## Decorator
-برای اعمال تغیرات یک تابع به وسیله تابع دیگری به کار میرود.<br>
-برای اینکار باید ابتدا یک تابع معرفی کنیم که میخواهیم با توجه به آن بر روی توابع دیگر ما آن تغیرات اعمال شوند.
-```python
-def dec(func):
- def inner():
-  print("*" * 20)
-  func()
-  print("*" * 20)
- return inner
-
-@dec
-def f()
- print("ali")
-
-@dec
-def f2():
- print("omid")
-
-f()
-f2()
-
--> ********************
--> ali
--> ********************
--> ********************
--> omid
--> ********************
-```
-<br>
-
-همچینین ما میتوانیم از دکوراتور های متعددی بر روی یک تابع استفاده کنیم
-```python
-def plus(func):
-	def inner(*x, **y):
-		print("+" * 20)
-		func(*x, **y)
-		print("+" * 20)
-	return inner
-
-def star(func):
- def inner(*x, **y):
-  print("*" * 20)
-  func(*x, **y)
-  print("*" * 20)
- return inner
-
-@plus
-@star
-def msg(name):
- print("i am ", name)
-
-msg(ali)
-
-_> ++++++++++++++++++++
--> ********************
--> ali
--> ********************
--> ++++++++++++++++++++
-```
-<br>
-
-همچنین میتوانیم برای دکوراتور ها ورودی هم در نظر گرفت، به این شکل که تابع دکوراتور باید از چند تابع تشکیل شود
-```python
-def star(num):
-	def inner1(func):
-		def inner2(*args, **kwargs):
-			print("*" * num)
-			func(*args, **kwargs)
-			print("*" * num)
-		retunr inner2
-	return inner1
-
-@star(5)
-def msg(name):
-	print("i am", name)
-
-msg(ali)
-
--> *****
--> ali
--> *****
-```
-<br>
-
-به مثال زیر توجه کنید <br>
-این برنامه قصد دارد که اجازه دست رسی یک سری از کاربر ها را به برنامه قطع کند
-```python
-password = {"ali" : "24369871", "reza01" : "547925", "neda1375" : 645564"}
-blacklist = {"neda1375", "reza01"}
-
-def ban(func):
-	def inner(*args, **kwargs):
-		if args[0] in blacklist:
-			print("This user is blackes!!!")
-		else :
-			func(*args, **kwargs)
-	return inner
-
-
-@ban
-def print_password(username):
-	print(username, " : ", password[username])
-
-
-@ban
-def change_password(username, new_password)
-	password[username] = new_password
-	print(username, " : ", password[username])
-
-
-print_password(ali)
-change_password(neda1375, 12345)
-
--> ali : 24369871
--> This user is blocked!!!
-```
-<br>
-
-مثال زیر برای به دست آوردن زمانی است که یک تابع برای اجرا لازم دارد
-```python
-from time import perf_counter
-
-def time_calculation(func):
-	def wrapper_decorator(*args, **kwargs):
-		start_time = perf_counter()
-		value = func(*args, **kwargs)
-		end_time = perf_counter()
-		run_time = end_time - start time
-		print("The run time of", func.__name__, "is", run_time)
-		return value
-	return wrapper_decorator
-
-
-@time_calculation
-def A (y):
-	sum = 0
-	for i in range(y):
-		s += i**2
-
-
-@time_calculation
-def B (x):
-	fact = 1
-	for i in range(1, x+1):
-		facr *= i
-
-
-A(100000)
-B(10000)
-
--> 5.684652135
--> 12.43184654
 ```
 <br>
 <br>
